@@ -101,6 +101,13 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+    var answer = [];
+    for (var i = 0, length = array.length; i < length; i += 1){
+      if (_.indexOf(answer, array[i]) === -1){
+        answer.push(array[i]);
+      }
+    }
+    return answer;
   };
 
 

@@ -162,17 +162,22 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    var total,
+        state = 1;
     if(accumulator || accumulator === 0){
-      var total = iterator(accumulator, collection[0])
-      for(var i = 1, length = collection.length; i < length; i += 1){
-        total = iterator(total, collection[i])
-      }
+      total = iterator(accumulator, collection[0])
     } else {
-      var total = collection[0]
-      for(var i = 1, length = collection.length; i < length; i += 1){
+      accumulator = collection[0];
+      total = iterator(accumulator, collection[1])
+      state = 0;  //No accumulator state
+    }
+    _.each(collection, function(item, i, collection){
+      if(i > 0 && state){
+        total = iterator(total, collection[i])
+      } else if (i > 1 && state === 0){
         total = iterator(total, collection[i])
       }
-    }
+    })
     return total;
   };
 

@@ -221,12 +221,12 @@
 			if(current == false){
 				return false;
 			}
-      if(next === undefined){
-        return false;
-      }
 			if(iterator(next) == false){
 				return false;
 			}
+      if(next === undefined){
+        return false;
+      }
 			return true;
 		}, true)
 	}
@@ -237,6 +237,22 @@
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    var tot = 0;
+    _.each(collection, function(value){
+      if(value == true || typeof(value)== "string"){
+        tot++
+      }
+    });
+    if(tot == 0){
+      return false;
+    }
+    return !_.every(collection, function(a){
+      if(iterator === undefined){
+        return !a;
+      } else {
+        return !iterator(a);
+      }
+    })
   };
 
 

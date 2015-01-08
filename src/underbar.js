@@ -204,9 +204,34 @@
 
 
   // Determine whether all of the elements match a truth test.
-  _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
-  };
+ _.every = function(collection, iterator) {
+// TIP: Try re-using reduce() here.
+	if(collection.length === 0 || iterator === undefined){
+		return _.reduce(collection, function(current, next){
+			if(current == false){
+				return false;
+  			}
+  			if(next == false){
+				return false
+  			}
+  			return true;
+		}, true)
+	} else {
+		return _.reduce(collection, function(current, next){
+			if(current == false){
+				return false;
+			}
+      if(next === undefined){
+        return false;
+      }
+			if(iterator(next) == false){
+				return false;
+			}
+			return true;
+		}, true)
+	}
+}
+  
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one

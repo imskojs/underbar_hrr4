@@ -161,25 +161,34 @@
   //     return total + number * number;
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
-  _.reduce = function(collection, iterator, accumulator) {
-    var total,
-        state = 1;
-    if(accumulator || accumulator === 0){
-      total = iterator(accumulator, collection[0])
-    } else {
-      accumulator = collection[0];
-      total = iterator(accumulator, collection[1])
-      state = 0;  //No accumulator state
-    }
-    _.each(collection, function(item, i, collection){
-      if(i > 0 && state){
-        total = iterator(total, collection[i])
-      } else if (i > 1 && state === 0){
-        total = iterator(total, collection[i])
-      }
-    })
-    return total;
-  };
+ _.reduce = function(collection, iterator, accumulator) {
+   /* Dealing with objects. */
+   var index = 0;
+   if(collection.length !== +collection.length){
+     /* Creating keys array. */
+     var keys = [];
+     _.each(collection, function(value, key){
+       keys.push(key);
+     });
+     length = keys.length;
+     /* for non accumulator */
+     if(accumulator === undefined){
+       accumulator = collection[keys[index++]];
+     }
+     for (; index < length; index++){
+       accumulator = iterator(accumulator, collection[keys[index]])
+     }
+   } else {
+     length = collection.length
+     if(accumulator === undefined){
+       accumulator = collection[index++];
+     }
+     for(; index < length; index++){
+       accumulator = iterator(accumulator, collection[index])
+     }
+   } 
+   return accumulator;
+ }
 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {

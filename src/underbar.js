@@ -275,6 +275,19 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+// Count how many objects there are
+    var length = arguments.length;
+// From second object to last object extract keys and add them to first object
+    for(var i = 1; i < length; i++){
+      addObj(arguments[i]);
+    }
+    // Extract keys for an object and add to first object
+    function addObj(objx){
+      _.each(objx, function(value, key){
+        obj[key] = value
+      });
+    }
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already

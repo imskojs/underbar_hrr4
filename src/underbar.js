@@ -224,9 +224,9 @@
 			if(iterator(next) == false){
 				return false;
 			}
-      if(next === undefined){
-        return false;
-      }
+            if(next === undefined){
+              return false;
+            }
 			return true;
 		}, true)
 	}
@@ -293,6 +293,21 @@
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    // Count
+    var length = arguments.length;
+    // Show all keys in obj;
+    for(var i = 1; i < length; i++){
+      addObj(arguments[i]);
+    }
+    // extract and add only non existing keys in obj
+    function addObj(objx){
+      _.each(objx, function(value, key){
+        if(!obj.hasOwnProperty(key)){
+          obj[key] = value
+        }
+      });
+    }
+   return obj; 
   };
 
 
@@ -336,6 +351,18 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    // Store whether it is already called with unique value
+    var alreadyCalled = false;
+    
+    // Check whether an argument given to func is unique.
+    return function() {
+      if(!alreadyCalled) {
+        
+      }
+    }
+    
+    
+    
   };
 
   // Delays a function for the given number of milliseconds, and then calls

@@ -350,20 +350,20 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
-  _.memoize = function(func) {
-    // Store whether it is already called with unique value
-    var alreadyCalled = false;
-    
-    // Check whether an argument given to func is unique.
-    return function() {
-      if(!alreadyCalled) {
-        
-      }
+_.memoize = function(func) {
+  var cache = {};
+  return function() {
+    var args =  arguments;
+    // If first element of args array exist in cache
+    if(args[0] in cache){
+      // return the value.
+      return cache[args[0]];
+    } else {
+      return (cache[args[0]] = func.apply(this, args));
     }
+  }
+};
     
-    
-    
-  };
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
@@ -372,6 +372,15 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    "use strict";
+    var args = Array.prototype.slice.call(arguments, 2);
+    // delay for wait millisecons
+    // return a call to a function with args[2] to args[end]
+    var delayedcall = setTimeout(
+      function(){
+        return func.apply(this, args);
+      }, wait
+    )
   };
 
 
@@ -385,7 +394,31 @@
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
-  _.shuffle = function(array) {
+  _.shuffle = function (array) {
+    var X = array.slice(0);
+    
+    function shuffler(){
+      var rn;
+      for(var i = 0, length = array.length; i < length; i++){
+          rn = Math.floor(Math.random() * (i + 1)) ;
+          X[i] = X[rn];
+          X[rn] = array[i]
+      }
+      var checked = Array(length);
+      for(var j = 0; j < length; j++){
+        if(X[j] === array[j]){
+          checked[j] = true;
+        } else {
+          return true;
+        }
+      }
+      if(_.every(checked)){
+        shuffler();
+      }
+    }
+    
+    shuffler();
+    return X;
   };
 
 
